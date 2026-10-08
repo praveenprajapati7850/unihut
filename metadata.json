@@ -1,6 +1,11 @@
 {
   "name": "Campus Hustle",
   "description": "Private student marketplace for university campus to buy, sell, and negotiate textbooks, electronics, cycles, and hostel essentials.",
-  "requestFramePermissions": ["microphone", "camera"],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "requestFramePermissions": [
+    "microphone",
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

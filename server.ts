@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import geminiRoutes from './server/routes/geminiRoutes';
+import geminiRoutes from './server/routes/geminiRoutes.js';
 
 dotenv.config();
 
@@ -12,6 +12,7 @@ const __dirname = path.dirname(__filename);
 async function startServer() {
   const app = express();
   const PORT = Number(process.env.PORT) || 3000;
+  console.log(`[UniHut] Starting server on port ${PORT} with NODE_ENV=${process.env.NODE_ENV}`);
 
   // JSON Body parser
   app.use(express.json({ limit: '10mb' }));

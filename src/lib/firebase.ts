@@ -1,7 +1,12 @@
 import { initializeApp, getApps } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore, doc, getDocFromServer } from 'firebase/firestore';
-import firebaseConfig from '../../firebase-applet-config.json';
+import config from '../../firebase-applet-config.json';
+
+const firebaseConfig = {
+  ...config,
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || config.apiKey,
+};
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
 
