@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Sparkles, Loader2 } from 'lucide-react';
+import { X, Sparkles, Loader2, CheckCircle2, AlertTriangle, ChevronRight } from 'lucide-react';
 import { Listing, ShouldIBuyAnalysis } from '../types';
 
 interface ShouldIBuyModalProps {
@@ -56,70 +56,115 @@ export const ShouldIBuyModal: React.FC<ShouldIBuyModalProps> = ({
     }
   };
 
+  const getBadgeStyles = (color: string) => {
+    switch (color) {
+      case 'emerald': return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+      case 'amber': return 'bg-amber-50 text-amber-700 border-amber-200';
+      case 'rose': return 'bg-rose-50 text-rose-700 border-rose-200';
+      default: return 'bg-stone-50 text-stone-700 border-stone-200';
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-xs animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="fixed inset-0" onClick={onClose} />
-      <div className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-stone-200 p-6 z-10 space-y-4">
-        <div className="flex items-center justify-between pb-3 border-b border-stone-100">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
-              <Sparkles className="w-4 h-4" />
+      <div className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-stone-100 p-6 z-10 space-y-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 text-white flex items-center justify-center shadow-md">
+              <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-bold text-stone-900 text-sm">Should I Buy This?</h3>
-              <p className="text-[11px] text-stone-500">Gemini Deal Appraisal</p>
+              <h3 className="font-bold text-stone-900">AI Deal Appraisal</h3>
+              <p className="text-xs text-stone-500">{listing.title}</p>
             </div>
           </div>
           <button 
             type="button" 
             onClick={onClose} 
-            className="p-1 rounded-full text-stone-400 hover:text-stone-700"
+            className="p-2 rounded-full hover:bg-stone-100 text-stone-400 hover:text-stone-700 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {!analysis && !loading && (
-          <div className="text-center py-6 space-y-3">
-            <p className="text-xs text-stone-600">
-              Evaluate <strong>{listing.title}</strong> (₹{listing.price}) based on condition and campus market rates.
+          <div className="text-center py-8 space-y-4">
+            <p className="text-sm text-stone-600 px-4">
+              Get an instant AI-powered appraisal of this listing based on condition and campus market rates.
             </p>
             <button
               type="button"
               onClick={handleEvaluate}
-              className="px-5 py-2.5 bg-gradient-to-r from-[#A855F7] to-[#E45A8D] text-white font-bold text-xs rounded-xl shadow-md"
+              className="px-6 py-3 bg-stone-900 hover:bg-stone-800 text-white font-bold text-sm rounded-xl shadow-lg transition-all"
             >
-              Run AI Appraisal
+              Run Appraisal
             </button>
           </div>
         )}
 
         {loading && (
-          <div className="py-8 text-center space-y-2">
-            <Loader2 className="w-6 h-6 animate-spin text-purple-600 mx-auto" />
-            <p className="text-xs font-semibold text-stone-500">Evaluating deal...</p>
+          <div className="py-12 text-center space-y-3">
+            <Loader2 className="w-8 h-8 animate-spin text-purple-600 mx-auto" />
+            <p className="text-sm font-medium text-stone-500">Analyzing market data...</p>
           </div>
         )}
 
         {analysis && !loading && (
-          <div className="space-y-3 text-xs">
-            <div className="p-3 bg-stone-50 rounded-2xl border border-stone-200 flex items-center justify-between">
-              <span className="font-bold text-stone-800">Deal Verdict:</span>
-              <span className="px-2.5 py-1 rounded-full font-black text-xs bg-emerald-100 text-emerald-800">
-                {analysis.rating}
-              </span>
+          <div className="space-y-6">
+            <div className={`p-4 rounded-2xl border ${getBadgeStyles(analysis.badgeColor)}`}>
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-xs font-bold uppercase tracking-wider opacity-80">Verdict</span>
+                <span className="font-black text-sm">{analysis.rating}</span>
+              </div>
+              <p className="font-semibold text-stone-900">{analysis.headline}</p>
             </div>
-            <p className="text-stone-700">{analysis.explanation}</p>
+
+            <p className="text-sm text-stone-600 leading-relaxed">{analysis.explanation}</p>
+
+            <div className="grid grid-cols-1 gap-4 text-sm">
+              {analysis.pros.length > 0 && (
+                <div className="space-y-2">
+                  <h4 className="font-bold text-stone-900 flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500" /> Pros
+                  </h4>
+                  <ul className="space-y-1">
+                    {analysis.pros.map((pro, i) => (
+                      <li key={i} className="text-stone-600 pl-6 flex items-start gap-2">
+                        <ChevronRight className="w-4 h-4 text-stone-300 mt-0.5 shrink-0" /> {pro}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {analysis.cautions.length > 0 && (
+                <div className="space-y-2">
+                  <h4 className="font-bold text-stone-900 flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-amber-500" /> Cautions
+                  </h4>
+                  <ul className="space-y-1">
+                    {analysis.cautions.map((caution, i) => (
+                      <li key={i} className="text-stone-600 pl-6 flex items-start gap-2">
+                        <ChevronRight className="w-4 h-4 text-stone-300 mt-0.5 shrink-0" /> {caution}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
             {analysis.suggestedOfferPrice && onMakeOffer && (
               <button
                 type="button"
                 onClick={() => onMakeOffer(analysis.suggestedOfferPrice!)}
-                className="w-full py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl transition-all"
+                className="w-full py-3.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-purple-500/20"
               >
-                Make Offer at ₹{analysis.suggestedOfferPrice.toLocaleString('en-IN')}
+                Make Offer: ₹{analysis.suggestedOfferPrice.toLocaleString('en-IN')}
               </button>
             )}
-            <p className="text-[10px] text-stone-400 italic pt-1">{analysis.disclaimer}</p>
+            
+            <p className="text-[10px] text-stone-400 text-center italic">{analysis.disclaimer}</p>
           </div>
         )}
       </div>
