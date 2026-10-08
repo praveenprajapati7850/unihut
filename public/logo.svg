@@ -1,0 +1,75 @@
+<svg viewBox="0 0 200 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="unihutRoofGrad2" x1="12" y1="16" x2="52" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#FB923C" />
+      <stop offset="50%" stopColor="#F97316" />
+      <stop offset="100%" stopColor="#EA580C" />
+    </linearGradient>
+    <filter id="unihutShadow2" x="0" y="0" width="64" height="64" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" floodColor="#EA580C" floodOpacity="0.25" />
+    </filter>
+    <linearGradient id="capGrad2" x1="14" y1="6" x2="50" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#334155" />
+      <stop offset="100%" stopColor="#0F172A" />
+    </linearGradient>
+  </defs>
+
+  <!-- Chimney -->
+  <rect x="41" y="20" width="5.5" height="11" rx="1.5" fill="#C2410C" />
+  <rect x="40" y="19" width="7.5" height="2.5" rx="1" fill="#9A3412" />
+
+  <!-- Hut / House Body -->
+  <path
+    d="M32 17.5L50 31.5C51.2 32.4 51.5 34 50.8 35.2C50.5 35.7 50 36 49.5 36H47V48C47 52.4 43.4 56 39 56H25C20.6 56 17 52.4 17 48V36H14.5C13.4 36 12.5 35.1 12.5 34C12.5 33.5 12.7 33 13.1 32.7L32 17.5Z"
+    fill="url(#unihutRoofGrad2)"
+    filter="url(#unihutShadow2)"
+  />
+
+  <!-- Roof line highlight -->
+  <path
+    d="M12.5 33.5L32 18L51.5 33.5"
+    stroke="#FED7AA"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  />
+
+  <!-- 4-Pane Window -->
+  <rect x="25" y="36" width="5.5" height="5.5" rx="1.2" fill="#FFFFFF" />
+  <rect x="33.5" y="36" width="5.5" height="5.5" rx="1.2" fill="#FFFFFF" />
+  <rect x="25" y="44.5" width="5.5" height="5.5" rx="1.2" fill="#FFFFFF" />
+  <rect x="33.5" y="44.5" width="5.5" height="5.5" rx="1.2" fill="#FFFFFF" />
+
+  <!-- Academic Cap -->
+  <path
+    d="M22 13.5C22 13.5 22 18 32 18C42 18 42 13.5 42 13.5"
+    fill="#1E293B"
+    stroke="#0F172A"
+    strokeWidth="1"
+  />
+  <path
+    d="M32 5L52 12.5L32 20L12 12.5L32 5Z"
+    fill="url(#capGrad2)"
+    stroke="#0F172A"
+    strokeWidth="1"
+    strokeLinejoin="round"
+  />
+  <circle cx="32" cy="12.5" r="1.8" fill="#F59E0B" />
+  <path
+    d="M32 12.5C27 13.2 21 14.5 19 18C18.2 19.5 18 21.5 18 23"
+    stroke="#F59E0B"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    fill="none"
+  />
+  <circle cx="18" cy="23.2" r="1.2" fill="#D97706" />
+  <path d="M16.5 24.2H19.5L19 28.5H17L16.5 24.2Z" fill="#F59E0B" />
+
+  <!-- UniHut typography -->
+  <text x="70" y="44" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="34" letter-spacing="-0.03em">
+    <tspan fill="#1E293B">Uni</tspan><tspan fill="#EA580C">Hut</tspan>
+  </text>
+  <text x="72" y="55" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="8" fill="#78716C" letter-spacing="0.1em">
+    YOUR CAMPUS. YOUR MARKETPLACE.
+  </text>
+</svg>

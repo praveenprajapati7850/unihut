@@ -1,0 +1,267 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with campus verification and seller stats",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "displayName": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 120 },
+        "photoURL": { "type": "string", "maxLength": 500 },
+        "college": { "type": "string", "maxLength": 150 },
+        "verifiedCampus": { "type": "boolean" },
+        "rating": { "type": "number" },
+        "totalSales": { "type": "number" },
+        "totalListings": { "type": "number" },
+        "createdAt": { "type": "string" },
+        "lastLoginAt": { "type": "string" }
+      },
+      "required": ["uid", "displayName", "email"]
+    },
+    "Listing": {
+      "title": "Listing",
+      "description": "Marketplace item listing",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "sellerId": { "type": "string", "maxLength": 128 },
+        "sellerName": { "type": "string", "maxLength": 100 },
+        "sellerPhotoURL": { "type": "string", "maxLength": 500 },
+        "sellerRating": { "type": "number" },
+        "title": { "type": "string", "maxLength": 150 },
+        "description": { "type": "string", "maxLength": 3000 },
+        "category": { "type": "string", "maxLength": 60 },
+        "condition": { "type": "string", "maxLength": 50 },
+        "price": { "type": "number" },
+        "originalPrice": { "type": "number" },
+        "negotiable": { "type": "boolean" },
+        "location": { "type": "string", "maxLength": 150 },
+        "imageUrl": { "type": "string", "maxLength": 1000 },
+        "status": { "type": "string", "enum": ["available", "reserved", "sold", "inactive"] },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" },
+        "views": { "type": "number" },
+        "tags": { "type": "array" }
+      },
+      "required": ["sellerId", "sellerName", "title", "description", "category", "condition", "price", "location", "status"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Direct message between buyer and seller",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "listingId": { "type": "string", "maxLength": 128 },
+        "senderId": { "type": "string", "maxLength": 128 },
+        "receiverId": { "type": "string", "maxLength": 128 },
+        "senderName": { "type": "string", "maxLength": 100 },
+        "message": { "type": "string", "maxLength": 2000 },
+        "createdAt": { "type": "string" },
+        "read": { "type": "boolean" }
+      },
+      "required": ["listingId", "senderId", "receiverId", "message"]
+    },
+    "Offer": {
+      "title": "Offer",
+      "description": "Price negotiation offer from buyer to seller",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "listingId": { "type": "string", "maxLength": 128 },
+        "buyerId": { "type": "string", "maxLength": 128 },
+        "sellerId": { "type": "string", "maxLength": 128 },
+        "amount": { "type": "number" },
+        "message": { "type": "string", "maxLength": 500 },
+        "status": { "type": "string", "enum": ["pending", "accepted", "rejected", "withdrawn"] },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["listingId", "buyerId", "sellerId", "amount", "status"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "Feedback and rating left after completed campus handover",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "listingId": { "type": "string", "maxLength": 128 },
+        "sellerId": { "type": "string", "maxLength": 128 },
+        "buyerId": { "type": "string", "maxLength": 128 },
+        "rating": { "type": "number" },
+        "comment": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["listingId", "sellerId", "buyerId", "rating"]
+    },
+    "Report": {
+      "title": "Report",
+      "description": "Abuse or trust report for a listing",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "listingId": { "type": "string", "maxLength": 128 },
+        "reportedBy": { "type": "string", "maxLength": 128 },
+        "reason": { "type": "string", "maxLength": 100 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["listingId", "reportedBy", "reason"]
+    },
+    "UserInteraction": {
+      "title": "UserInteraction",
+      "description": "Lightweight log of user interactions for recommendations",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "type": { "type": "string", "enum": ["search", "view", "offer", "purchase"] },
+        "listingId": { "type": "string", "maxLength": 128 },
+        "query": { "type": "string", "maxLength": 255 },
+        "category": { "type": "string", "maxLength": 100 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "type", "createdAt"]
+    },
+    "SavedListing": {
+      "title": "SavedListing",
+      "description": "Student saved/favourite listing bookmark",
+      "type": "object",
+      "properties": {
+        "listingId": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "savedAt": { "type": "string" }
+      },
+      "required": ["listingId", "savedAt"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "User notification for offers, messages, price drops, handovers, and wanted matches",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "type": { "type": "string" },
+        "title": { "type": "string", "maxLength": 200 },
+        "message": { "type": "string", "maxLength": 500 },
+        "listingId": { "type": "string", "maxLength": 128 },
+        "offerId": { "type": "string", "maxLength": 128 },
+        "wantedPostId": { "type": "string", "maxLength": 128 },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "type", "title", "message", "read", "createdAt"]
+    },
+    "WantedPost": {
+      "title": "WantedPost",
+      "description": "Student request for an item they need to buy",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 200 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "category": { "type": "string", "maxLength": 100 },
+        "budget": { "type": "number" },
+        "condition": { "type": "string", "maxLength": 50 },
+        "neededBy": { "type": "string", "maxLength": 100 },
+        "preferredLocation": { "type": "string", "maxLength": 100 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "userName": { "type": "string", "maxLength": 100 },
+        "userAvatar": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "fulfilled", "closed"] },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["title", "category", "budget", "userId", "createdAt", "status"]
+    },
+    "PriceAlert": {
+      "title": "PriceAlert",
+      "description": "Watch price alert for a listing",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "listingId": { "type": "string", "maxLength": 128 },
+        "listingTitle": { "type": "string", "maxLength": 200 },
+        "targetPrice": { "type": "number" },
+        "currentPrice": { "type": "number" },
+        "active": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "listingId", "targetPrice", "active", "createdAt"]
+    },
+    "Handover": {
+      "title": "Handover",
+      "description": "Campus handover schedule between buyer and seller",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "listingId": { "type": "string", "maxLength": 128 },
+        "listingTitle": { "type": "string", "maxLength": 200 },
+        "offerId": { "type": "string", "maxLength": 128 },
+        "buyerId": { "type": "string", "maxLength": 128 },
+        "buyerName": { "type": "string", "maxLength": 100 },
+        "sellerId": { "type": "string", "maxLength": 128 },
+        "sellerName": { "type": "string", "maxLength": 100 },
+        "date": { "type": "string", "maxLength": 50 },
+        "time": { "type": "string", "maxLength": 50 },
+        "location": { "type": "string", "maxLength": 150 },
+        "notes": { "type": "string", "maxLength": 500 },
+        "status": { "type": "string", "enum": ["proposed", "confirmed", "completed", "cancelled"] },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["listingId", "buyerId", "sellerId", "date", "time", "location", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/users/{userId}/savedListings/{listingId}": {
+      "schema": "SavedListing",
+      "description": "User's saved/favourite items"
+    },
+    "/listings/{listingId}": {
+      "schema": "Listing",
+      "description": "Marketplace listings"
+    },
+    "/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Direct chat messages"
+    },
+    "/offers/{offerId}": {
+      "schema": "Offer",
+      "description": "Price negotiation offers"
+    },
+    "/reviews/{reviewId}": {
+      "schema": "Review",
+      "description": "User reviews"
+    },
+    "/reports/{reportId}": {
+      "schema": "Report",
+      "description": "Listing reports"
+    },
+    "/userInteractions/{interactionId}": {
+      "schema": "UserInteraction",
+      "description": "User interactions for AI recommendations"
+    },
+    "/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "User notifications"
+    },
+    "/wantedPosts/{wantedPostId}": {
+      "schema": "WantedPost",
+      "description": "Student wanted posts"
+    },
+    "/priceAlerts/{alertId}": {
+      "schema": "PriceAlert",
+      "description": "Price drop watch alerts"
+    },
+    "/handovers/{handoverId}": {
+      "schema": "Handover",
+      "description": "Campus handover scheduling"
+    }
+  }
+}

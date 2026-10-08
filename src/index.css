@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+/* UniHut Official Brand Gradient Accents
+   Orange (#FF6B1A) -> Pink (#E45A8D) -> Purple (#A855F7) */
+.bg-unihut-gradient {
+  background: linear-gradient(135deg, #FF6B1A 0%, #E45A8D 50%, #A855F7 100%);
+}
+
+.bg-unihut-gradient-hover:hover {
+  background: linear-gradient(135deg, #F05E0E 0%, #D84A7E 50%, #9333EA 100%);
+}
+
+.text-unihut-gradient {
+  background: linear-gradient(135deg, #FF6B1A 0%, #E45A8D 50%, #A855F7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.border-unihut-gradient {
+  border-image: linear-gradient(135deg, #FF6B1A 0%, #E45A8D 50%, #A855F7 100%) 1;
+}
+
+.glow-unihut {
+  box-shadow: 0 10px 25px -5px rgba(228, 90, 141, 0.25), 0 8px 10px -6px rgba(255, 107, 26, 0.2);
+}
