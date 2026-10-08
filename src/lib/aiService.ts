@@ -11,6 +11,24 @@ import {
 } from '../types';
 
 /**
+ * Helper to reduce boilerplate for AI API calls.
+ */
+async function postAiRequest<T>(endpoint: string, data: any, errorMessage: string): Promise<T> {
+  const response = await fetch(`/api/gemini/${endpoint}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const errData = await response.json().catch(() => ({}));
+    throw new Error(errData.error || errorMessage);
+  }
+
+  return response.json();
+}
+
+/**
  * 1. AI Listing Assistant Client Call
  */
 export async function fetchAiListingAssistant(data: {
@@ -21,18 +39,7 @@ export async function fetchAiListingAssistant(data: {
   description?: string;
   category?: string;
 }): Promise<AiListingSuggestion> {
-  const response = await fetch('/api/gemini/listing-assistant', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    const errData = await response.json().catch(() => ({}));
-    throw new Error(errData.error || 'AI suggestions are temporarily unavailable.');
-  }
-
-  return response.json();
+  return postAiRequest('listing-assistant', data, 'AI suggestions are temporarily unavailable.');
 }
 
 /**
@@ -45,36 +52,14 @@ export async function fetchAiPriceEstimate(data: {
   originalPrice?: number;
   category: string;
 }): Promise<AiPriceEstimate> {
-  const response = await fetch('/api/gemini/price-advisor', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    const errData = await response.json().catch(() => ({}));
-    throw new Error(errData.error || 'AI suggestions are temporarily unavailable.');
-  }
-
-  return response.json();
+  return postAiRequest('price-advisor', data, 'AI suggestions are temporarily unavailable.');
 }
 
 /**
  * 3. AI Smart Search Client Call
  */
 export async function fetchAiSmartSearch(query: string): Promise<AiSmartSearchFilter> {
-  const response = await fetch('/api/gemini/smart-search', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query }),
-  });
-
-  if (!response.ok) {
-    const errData = await response.json().catch(() => ({}));
-    throw new Error(errData.error || 'AI suggestions are temporarily unavailable.');
-  }
-
-  return response.json();
+  return postAiRequest('smart-search', { query }, 'AI suggestions are temporarily unavailable.');
 }
 
 /**
@@ -88,18 +73,7 @@ export async function fetchAiOfferMessage(data: {
   proposedOffer: number;
   negotiable?: boolean;
 }): Promise<AiOfferSuggestion> {
-  const response = await fetch('/api/gemini/offer-message', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    const errData = await response.json().catch(() => ({}));
-    throw new Error(errData.error || 'AI suggestions are temporarily unavailable.');
-  }
-
-  return response.json();
+  return postAiRequest('offer-message', data, 'AI suggestions are temporarily unavailable.');
 }
 
 /**
@@ -117,26 +91,11 @@ export async function fetchAiRecommendations(
     condition: l.condition,
   }));
 
-  const response = await fetch('/api/gemini/recommendations', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      recentInteractions,
-      availableListings: simplifiedListings,
-    }),
-  });
-
-  if (!response.ok) {
-    const errData = await response.json().catch(() => ({}));
-    throw new Error(errData.error || 'AI suggestions are temporarily unavailable.');
-  }
-
-  return response.json();
+  return postAiRequest('recommendations', { recentInteractions, availableListings: simplifiedListings }, 'AI suggestions are temporarily unavailable.');
 }
 
 /**
  * Determines whether a search query warrants natural language Gemini parsing
- * (e.g. phrases like "under", "below", "cheap", "for hostel", "need", "budget", "looking for" or 3+ words)
  */
 export function isNaturalLanguageQuery(query: string): boolean {
   const q = query.trim().toLowerCase();
@@ -176,18 +135,7 @@ export async function fetchAiVisualSearch(data: {
   imageBase64: string;
   mimeType?: string;
 }): Promise<VisualSearchResult> {
-  const response = await fetch('/api/gemini/visual-search', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    const errData = await response.json().catch(() => ({}));
-    throw new Error(errData.error || 'AI visual analysis temporarily unavailable.');
-  }
-
-  return response.json();
+  return postAiRequest('visual-search', data, 'AI visual analysis temporarily unavailable.');
 }
 
 /**
@@ -204,18 +152,7 @@ export async function fetchAiShouldIBuy(data: {
   description?: string;
   category: string;
 }): Promise<ShouldIBuyAnalysis> {
-  const response = await fetch('/api/gemini/should-i-buy', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    const errData = await response.json().catch(() => ({}));
-    throw new Error(errData.error || 'AI deal assistant temporarily unavailable.');
-  }
-
-  return response.json();
+  return postAiRequest('should-i-buy', data, 'AI deal assistant temporarily unavailable.');
 }
 
 /**
@@ -226,18 +163,7 @@ export async function fetchAiVoiceSearch(data: {
   mimeType?: string;
   transcript?: string;
 }): Promise<AiVoiceSearchResult> {
-  const response = await fetch('/api/gemini/voice-search', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    const errData = await response.json().catch(() => ({}));
-    throw new Error(errData.error || 'AI voice search temporarily unavailable.');
-  }
-
-  return response.json();
+  return postAiRequest('voice-search', data, 'AI voice search temporarily unavailable.');
 }
 
 /**
@@ -251,18 +177,7 @@ export async function fetchAskAiChat(data: {
   suggestedAction?: 'browse_marketplace' | 'post_listing' | 'post_wanted' | 'view_handover_zones' | null;
   suggestedQuery?: string | null;
 }> {
-  const response = await fetch('/api/gemini/ask-ai', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    const errData = await response.json().catch(() => ({}));
-    throw new Error(errData.error || 'Ask AI is temporarily unavailable.');
-  }
-
-  return response.json();
+  return postAiRequest('ask-ai', data, 'Ask AI is temporarily unavailable.');
 }
 
 

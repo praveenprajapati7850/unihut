@@ -11,11 +11,18 @@ interface ShouldIBuyModalProps {
 }
 
 // --- Hook ---
+const analysisCache = new Map<string, ShouldIBuyAnalysis>();
+
 const useShouldIBuy = (listing: Listing) => {
   const [loading, setLoading] = useState(false);
-  const [analysis, setAnalysis] = useState<ShouldIBuyAnalysis | null>(null);
+  const [analysis, setAnalysis] = useState<ShouldIBuyAnalysis | null>(() => analysisCache.get(listing.id) || null);
 
-  const evaluate = async () => {
+  const evaluate = React.useCallback(async () => {
+    if (analysisCache.has(listing.id)) {
+      setAnalysis(analysisCache.get(listing.id)!);
+      return;
+    }
+    
     setLoading(true);
     try {
       const res = await fetch('/api/gemini/should-i-buy', {
@@ -25,6 +32,7 @@ const useShouldIBuy = (listing: Listing) => {
       });
       if (!res.ok) throw new Error('API request failed');
       const data = await res.json();
+      analysisCache.set(listing.id, data);
       setAnalysis(data);
     } catch {
       // Fallback logic
@@ -33,7 +41,7 @@ const useShouldIBuy = (listing: Listing) => {
       const discount = Math.round(((orig - asking) / orig) * 100);
       const suggested = Math.round(asking * 0.85);
 
-      setAnalysis({
+      const fallbackData = {
         rating: discount >= 25 ? 'Good Deal' : 'Fair Deal',
         badgeColor: discount >= 25 ? 'emerald' : 'amber',
         headline: `${discount}% below estimated retail value.`,
@@ -43,11 +51,13 @@ const useShouldIBuy = (listing: Listing) => {
         pros: ['Direct peer exchange on campus', 'Verified student listing'],
         cautions: ['Inspect physical item before completing exchange'],
         disclaimer: 'AI estimate based on campus benchmarks. Not guaranteed appraisal.',
-      });
+      };
+      analysisCache.set(listing.id, fallbackData);
+      setAnalysis(fallbackData);
     } finally {
       setLoading(false);
     }
-  };
+  }, [listing]);
 
   return { analysis, loading, evaluate };
 };
