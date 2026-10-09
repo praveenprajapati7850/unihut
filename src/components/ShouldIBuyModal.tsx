@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Sparkles, Loader2, CheckCircle2, AlertTriangle, ChevronRight } from 'lucide-react';
 import { Listing, ShouldIBuyAnalysis } from '../types';
+import { calculateFallbackAppraisal } from '../lib/appraisal';
 
 // --- Types ---
 interface ShouldIBuyModalProps {
@@ -36,22 +37,7 @@ const useShouldIBuy = (listing: Listing) => {
       setAnalysis(data);
     } catch {
       // Fallback logic
-      const asking = listing.price;
-      const orig = listing.originalPrice || asking * 1.4;
-      const discount = Math.round(((orig - asking) / orig) * 100);
-      const suggested = Math.round(asking * 0.85);
-
-      const fallbackData = {
-        rating: discount >= 25 ? 'Good Deal' : 'Fair Deal',
-        badgeColor: discount >= 25 ? 'emerald' : 'amber',
-        headline: `${discount}% below estimated retail value.`,
-        explanation: `Asking price is ₹${asking.toLocaleString('en-IN')}. Reasonable for campus peer exchange in ${listing.condition.toLowerCase()} condition.`,
-        suggestedOfferPrice: suggested,
-        marketFairPriceRange: `₹${Math.round(asking * 0.8)} – ₹${Math.round(asking * 1.05)}`,
-        pros: ['Direct peer exchange on campus', 'Verified student listing'],
-        cautions: ['Inspect physical item before completing exchange'],
-        disclaimer: 'AI estimate based on campus benchmarks. Not guaranteed appraisal.',
-      };
+      const fallbackData = calculateFallbackAppraisal(listing);
       analysisCache.set(listing.id, fallbackData);
       setAnalysis(fallbackData);
     } finally {
